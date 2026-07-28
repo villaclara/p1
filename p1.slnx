@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/P1.Api/P1.Api.csproj" />
+  <Project Path="src/P1.Core/P1.Core.csproj" Id="0caf3e8c-c0bd-4f28-a8af-fff9ed3b4d93" />
+</Solution>
