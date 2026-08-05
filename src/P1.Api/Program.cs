@@ -1,10 +1,22 @@
+using Microsoft.EntityFrameworkCore;
+using P1.Core.Data;
+using P1.Core.Data.Seed;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(o =>
+    o.UseSqlServer(connectionString));
+
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+var dbCtx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+await new HistoryResultsSeeder(dbCtx).SeedAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
