@@ -9,4 +9,6 @@ public class Driver
     public required string LastName { get; set; }
 
     public required string Code { get; set; }
+
+    public int Number { get; set; }
 }

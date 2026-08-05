@@ -12,7 +12,7 @@ public class DriverResult
 
     public int FinishPosition { get; set; }
 
-    public int PointsScored { get; set; }
+    public double PointsScored { get; set; }
 
     public Driver Driver { get; set; } = default!;
 
