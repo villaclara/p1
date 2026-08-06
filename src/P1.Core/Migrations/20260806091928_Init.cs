@@ -14,10 +14,9 @@ namespace P1.Core.Migrations
                 name: "Circuits",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Country = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,9 +27,8 @@ namespace P1.Core.Migrations
                 name: "Constructors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,12 +39,11 @@ namespace P1.Core.Migrations
                 name: "Drivers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", nullable: false),
+                    Code = table.Column<string>(type: "TEXT", nullable: false),
+                    Number = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,9 +54,8 @@ namespace P1.Core.Migrations
                 name: "Seasons",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Year = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Year = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,10 +66,9 @@ namespace P1.Core.Migrations
                 name: "Races",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RaceNumber = table.Column<int>(type: "int", nullable: false),
-                    CircuitId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    RaceNumber = table.Column<int>(type: "INTEGER", nullable: false),
+                    CircuitId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -90,11 +85,10 @@ namespace P1.Core.Migrations
                 name: "DriverTeams",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DriverId = table.Column<int>(type: "int", nullable: false),
-                    ConstructorId = table.Column<int>(type: "int", nullable: false),
-                    SeasonId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    DriverId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ConstructorId = table.Column<int>(type: "INTEGER", nullable: false),
+                    SeasonId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,13 +117,12 @@ namespace P1.Core.Migrations
                 name: "DriverResults",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DriverId = table.Column<int>(type: "int", nullable: false),
-                    SeasonId = table.Column<int>(type: "int", nullable: false),
-                    RaceId = table.Column<int>(type: "int", nullable: false),
-                    FinishPosition = table.Column<int>(type: "int", nullable: false),
-                    PointsScored = table.Column<double>(type: "float", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    DriverId = table.Column<int>(type: "INTEGER", nullable: false),
+                    SeasonId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RaceId = table.Column<int>(type: "INTEGER", nullable: false),
+                    FinishPosition = table.Column<int>(type: "INTEGER", nullable: false),
+                    PointsScored = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {

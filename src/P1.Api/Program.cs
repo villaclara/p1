@@ -10,7 +10,7 @@ builder.Services.AddOpenApi();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(o =>
-    o.UseSqlServer(connectionString));
+    o.UseSqlite("Data Source=p1_test.db"));
 
 var app = builder.Build();
 

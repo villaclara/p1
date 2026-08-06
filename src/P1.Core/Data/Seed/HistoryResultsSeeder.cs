@@ -40,7 +40,7 @@ public class HistoryResultsSeeder
                 await _context.Database.EnsureDeletedAsync();
             }
 
-            await _context.Database.EnsureCreatedAsync();
+            await _context.Database.MigrateAsync();
 
             var seasons = rows
                 .GroupBy(r => r.SeasonId)
@@ -73,7 +73,7 @@ public class HistoryResultsSeeder
                         FirstName = best.DriverFirstName,
                         LastName = best.DriverLastName,
                         Code = best.DriverCode,
-                        Number = best.DriverNumber.Value
+                        Number = best.DriverNumber!.Value
                     };
                 })
                 .ToList();
@@ -107,51 +107,69 @@ public class HistoryResultsSeeder
                 DriverId = r.DriverId,
                 SeasonId = r.SeasonId,
                 RaceId = r.RaceId,
-                FinishPosition = r.FinishPosition.Value,
-                PointsScored = r.PointsScored.Value
+                FinishPosition = r.FinishPosition!.Value,
+                PointsScored = r.PointsScored!.Value
             }).ToList();
 
-            // 1. Circuits
-            await EnableIdentityInsertAsync("Circuits");
             await _context.Circuits.AddRangeAsync(circuits);
-            await _context.SaveChangesAsync();
-            await DisableIdentityInsertAsync("Circuits");
-
-            // 2. Constructors
-            await EnableIdentityInsertAsync("Constructors");
             await _context.Constructors.AddRangeAsync(constructors);
-            await _context.SaveChangesAsync();
-            await DisableIdentityInsertAsync("Constructors");
-
-            // 3. Seasons
-            await EnableIdentityInsertAsync("Seasons");
             await _context.Seasons.AddRangeAsync(seasons);
-            await _context.SaveChangesAsync();
-            await DisableIdentityInsertAsync("Seasons");
-
-            // 4. Drivers
-            await EnableIdentityInsertAsync("Drivers");
             await _context.Drivers.AddRangeAsync(drivers);
-            await _context.SaveChangesAsync();
-            await DisableIdentityInsertAsync("Drivers");
-
-            // 5. Races (Depends on Circuits)
-            await EnableIdentityInsertAsync("Races");
             await _context.Races.AddRangeAsync(races);
-            await _context.SaveChangesAsync();
-            await DisableIdentityInsertAsync("Races");
-
-            // 6. DriverTeams (Depends on Drivers, Constructors, Seasons)
-            await EnableIdentityInsertAsync("DriverTeams");
             await _context.DriverTeams.AddRangeAsync(driverTeams);
-            await _context.SaveChangesAsync();
-            await DisableIdentityInsertAsync("DriverTeams");
-
-            // 7. DriverResults (Depends on Drivers, Seasons, Races)
-            await EnableIdentityInsertAsync("DriverResults");
             await _context.DriverResults.AddRangeAsync(driverResults);
-            await _context.SaveChangesAsync();
-            await DisableIdentityInsertAsync("DriverResults");
+
+            /* The code below is used to disable the auto-incrementing Id 
+             * that EFCore does and insert ids of entities based on document;
+             * 
+             * This code should be uncommented if code in <see cref="AppDbContext.cs"> modelbuilder
+             * removed b.Property(e => e.Id).ValueGeneratedNever(); in every entity.
+             * Also the code above with adding ranges of entities should be COMMENTED TOO.
+             */
+            #region DisableAutoIncrementEFCore
+            //// 1. Circuits
+            //await EnableIdentityInsertAsync("Circuits");
+            //await _context.Circuits.AddRangeAsync(circuits);
+            //await _context.SaveChangesAsync();
+            //await DisableIdentityInsertAsync("Circuits");
+
+            //// 2. Constructors
+            //await EnableIdentityInsertAsync("Constructors");
+            //await _context.Constructors.AddRangeAsync(constructors);
+            //await _context.SaveChangesAsync();
+            //await DisableIdentityInsertAsync("Constructors");
+
+            //// 3. Seasons
+            //await EnableIdentityInsertAsync("Seasons");
+            //await _context.Seasons.AddRangeAsync(seasons);
+            //await _context.SaveChangesAsync();
+            //await DisableIdentityInsertAsync("Seasons");
+
+            //// 4. Drivers
+            //await EnableIdentityInsertAsync("Drivers");
+            //await _context.Drivers.AddRangeAsync(drivers);
+            //await _context.SaveChangesAsync();
+            //await DisableIdentityInsertAsync("Drivers");
+
+            //// 5. Races (Depends on Circuits)
+            //await EnableIdentityInsertAsync("Races");
+            //await _context.Races.AddRangeAsync(races);
+            //await _context.SaveChangesAsync();
+            //await DisableIdentityInsertAsync("Races");
+
+            //// 6. DriverTeams (Depends on Drivers, Constructors, Seasons)
+            //await EnableIdentityInsertAsync("DriverTeams");
+            //await _context.DriverTeams.AddRangeAsync(driverTeams);
+            //await _context.SaveChangesAsync();
+            //await DisableIdentityInsertAsync("DriverTeams");
+
+            //// 7. DriverResults (Depends on Drivers, Seasons, Races)
+            //await EnableIdentityInsertAsync("DriverResults");
+            //await _context.DriverResults.AddRangeAsync(driverResults);
+            //await _context.SaveChangesAsync();
+            //await DisableIdentityInsertAsync("DriverResults");
+
+            #endregion DisableAutoIncrementEFCore
 
             // Commit the entire transaction
             await transaction.CommitAsync();
@@ -175,11 +193,15 @@ public class HistoryResultsSeeder
         }
     }
 
+#pragma warning disable EF1002 // Risk of vulnerability to SQL injection.
     private Task EnableIdentityInsertAsync(string tableName) =>
         _context.Database.ExecuteSqlRawAsync($"SET IDENTITY_INSERT [dbo].[{tableName}] ON;");
+#pragma warning restore EF1002 // Risk of vulnerability to SQL injection.
 
+#pragma warning disable EF1002 // Risk of vulnerability to SQL injection.
     private Task DisableIdentityInsertAsync(string tableName) =>
         _context.Database.ExecuteSqlRawAsync($"SET IDENTITY_INSERT [dbo].[{tableName}] OFF;");
+#pragma warning restore EF1002 // Risk of vulnerability to SQL injection.
 
     private static List<F1SeedRow> ReadSeedCsv(string path)
     {

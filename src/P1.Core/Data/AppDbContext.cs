@@ -30,21 +30,33 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Season>(b =>
         {
             b.HasKey(e => e.Id);
+
+            b.Property(e => e.Id)
+            .ValueGeneratedNever();
         });
 
         modelBuilder.Entity<Driver>(b =>
         {
             b.HasKey(e => e.Id);
+
+            b.Property(e => e.Id)
+            .ValueGeneratedNever();
         });
 
         modelBuilder.Entity<Constructor>(b =>
         {
             b.HasKey(e => e.Id);
+
+            b.Property(e => e.Id)
+            .ValueGeneratedNever();
         });
 
         modelBuilder.Entity<DriverTeam>(b =>
         {
             b.HasKey(e => e.Id);
+
+            b.Property(e => e.Id)
+            .ValueGeneratedNever();
 
             b.HasOne(e => e.Season)
             .WithMany()
@@ -63,11 +75,16 @@ public class AppDbContext : DbContext
         {
             b.HasKey(e => e.Id);
 
+            b.Property(e => e.Id)
+            .ValueGeneratedNever();
         });
 
         modelBuilder.Entity<Race>(b =>
         {
             b.HasKey(e => e.Id);
+
+            b.Property(e => e.Id)
+            .ValueGeneratedNever();
 
             b.HasOne(e => e.Circuit)
             .WithMany()
@@ -77,6 +94,9 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<DriverResult>(b =>
         {
             b.HasKey(e => e.Id);
+
+            b.Property(e => e.Id)
+            .ValueGeneratedNever();
 
             b.HasOne(e => e.Season)
             .WithMany()
