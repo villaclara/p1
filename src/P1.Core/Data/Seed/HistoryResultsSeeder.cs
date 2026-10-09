@@ -83,7 +83,9 @@ public class HistoryResultsSeeder
                 .Select(g => new Race
                 {
                     Id = g.Key,
+                    SeasonId = g.First().SeasonId,
                     RaceNumber = g.First().RaceNumber,
+                    RaceName = g.First().RaceName,
                     CircuitId = g.First().CircuitId
                 })
                 .ToList();

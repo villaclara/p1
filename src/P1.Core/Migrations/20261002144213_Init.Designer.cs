@@ -10,7 +10,7 @@ using P1.Core.Data;
 namespace P1.Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260806091928_Init")]
+    [Migration("20261002144213_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -140,12 +140,21 @@ namespace P1.Core.Migrations
                     b.Property<int>("CircuitId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("RaceName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("RaceNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SeasonId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CircuitId");
+
+                    b.HasIndex("SeasonId");
 
                     b.ToTable("Races");
                 });
@@ -225,7 +234,15 @@ namespace P1.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("P1.Core.Data.Entities.Season", "Season")
+                        .WithMany()
+                        .HasForeignKey("SeasonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Circuit");
+
+                    b.Navigation("Season");
                 });
 #pragma warning restore 612, 618
         }

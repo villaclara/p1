@@ -63,25 +63,6 @@ namespace P1.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Races",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false),
-                    RaceNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    CircuitId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Races", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Races_Circuits_CircuitId",
-                        column: x => x.CircuitId,
-                        principalTable: "Circuits",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DriverTeams",
                 columns: table => new
                 {
@@ -107,6 +88,33 @@ namespace P1.Core.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DriverTeams_Seasons_SeasonId",
+                        column: x => x.SeasonId,
+                        principalTable: "Seasons",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Races",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    RaceNumber = table.Column<int>(type: "INTEGER", nullable: false),
+                    RaceName = table.Column<string>(type: "TEXT", nullable: false),
+                    CircuitId = table.Column<int>(type: "INTEGER", nullable: false),
+                    SeasonId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Races", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Races_Circuits_CircuitId",
+                        column: x => x.CircuitId,
+                        principalTable: "Circuits",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Races_Seasons_SeasonId",
                         column: x => x.SeasonId,
                         principalTable: "Seasons",
                         principalColumn: "Id",
@@ -181,6 +189,11 @@ namespace P1.Core.Migrations
                 name: "IX_Races_CircuitId",
                 table: "Races",
                 column: "CircuitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Races_SeasonId",
+                table: "Races",
+                column: "SeasonId");
         }
 
         /// <inheritdoc />
@@ -202,10 +215,10 @@ namespace P1.Core.Migrations
                 name: "Drivers");
 
             migrationBuilder.DropTable(
-                name: "Seasons");
+                name: "Circuits");
 
             migrationBuilder.DropTable(
-                name: "Circuits");
+                name: "Seasons");
         }
     }
 }

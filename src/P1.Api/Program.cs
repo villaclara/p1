@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using P1.Api.Endpoints;
 using P1.Core.Data;
-using P1.Core.Data.Seed;
+using P1.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +13,16 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(o =>
     o.UseSqlite("Data Source=p1_test.db"));
 
+builder.Services.AddScoped<StandingsService>();
+
 var app = builder.Build();
 
-using var scope = app.Services.CreateScope();
-var dbCtx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-await new HistoryResultsSeeder(dbCtx).SeedAsync();
+/* Code below will seed the databse. 
+ * Use it only when neccessarry.
+ */
+//using var scope = app.Services.CreateScope();
+//var dbCtx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//await new HistoryResultsSeeder(dbCtx).SeedAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -26,28 +32,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapStatsOptionsEndpoints();
 
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

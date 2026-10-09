@@ -89,6 +89,10 @@ public class AppDbContext : DbContext
             b.HasOne(e => e.Circuit)
             .WithMany()
             .HasForeignKey(e => e.CircuitId);
+
+            b.HasOne(e => e.Season)
+            .WithMany()
+            .HasForeignKey(e => e.SeasonId);
         });
 
         modelBuilder.Entity<DriverResult>(b =>
